@@ -1,0 +1,50 @@
+QUES- create 2 tables student and course ,students having at least one course, more than 1 course, arrange them acc to sections
+
+
+
+CREATE TABLE student(
+    s_id int PRIMARY KEY,s_name varchar(50), s_age int);
+CREATE TABLE course(
+    c_id int PRIMARY KEY,c_name varchar(50),s_id int,FOREIGN KEY(s_id) REFERENCES student(s_id));
+INSERT INTO student(s_id,s_name,s_age) VALUES(100,'yash',20),(101,'akshit',18),(102,'aryan',19),(103,'nikhil',22);
+INSERT INTO course(c_id,c_name,s_id) VALUES (200,'maths',100),(201,'geo',103),(202,'chem',102),(203,'physics',101),(204,'cn',101),(205,'dbms',102),(206,'os',100);
+
+SELECT s.s_id, 
+       s.s_name, 
+       s.s_age,
+       COUNT(c.c_id) AS course_count,
+       CASE 
+           WHEN COUNT(c.c_id) > 1 THEN 'More than 1 course'
+           ELSE '1 course or fewer'
+       END AS course_status
+FROM student s
+JOIN course c ON s.s_id = c.s_id
+GROUP BY s.s_id, s.s_name, s.s_age;
+
+SELECT s.s_id, 
+       s.s_name, 
+       s.s_age,
+       COUNT(c.c_id) AS course_count,
+       CASE 
+           WHEN COUNT(c.c_id) > 1 THEN 'More than 1 course'
+           ELSE '1 course or fewer'
+       END AS course_status
+FROM student s
+JOIN course c ON s.s_id = c.s_id
+GROUP BY s.s_id, s.s_name, s.s_age
+HAVING COUNT(c.c_id)>1;
+
+SELECT s.s_id, 
+       s.s_name, 
+       s.s_age,
+       COUNT(c.c_id) AS course_count,
+       CASE 
+           WHEN s.s_id>=100 AND s.s_id<=101 THEN 'A'
+           WHEN s.s_id=102 THEN 'B'
+           ELSE 'C'
+       END AS Section
+FROM student s
+JOIN course c ON s.s_id = c.s_id
+GROUP BY s.s_id, s.s_name, s.s_age;
+
+
